@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Регистрация</h2>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    <form method="post" action="/register" enctype="multipart/form-data">
+        <input type="text" name="username" placeholder="Имя пользователя" required><br>
+        <input type="password" id="password" name="password" placeholder="Пароль" required>
+        <input type="checkbox" onclick="togglePassword()"> Показать пароль<br>
+        <input type="file" name="avatar" accept="image/*"><br>
+        <input type="text" name="admin_login" placeholder="Логин админа" required><br>
+        <input type="password" name="admin_password" placeholder="Пароль админа" required><br>
+        <button type="submit">Зарегистрировать</button>
+    </form>
+    <button onclick="toggleTheme()">Сменить тему</button>
+</div>
+<script>
+function togglePassword() {
+    var x = document.getElementById("password");
+    x.type = (x.type === "password") ? "text" : "password";
+}
+function toggleTheme() {
+    document.body.classList.toggle("dark");
+}
+</script>
+</body>
+</html>

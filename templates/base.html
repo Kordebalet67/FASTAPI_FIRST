@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Приложение{% endblock %}</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="dark"> <!-- по умолчанию тёмная тема -->
+    <!-- Переключатель темы в правом верхнем углу -->
+    <div class="theme-toggle">
+        <label class="switch">
+            <input type="checkbox" id="themeSwitcher" checked>
+            <span class="slider round"></span>
+        </label>
+    </div>
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <script>
+    const body = document.body;
+    const switcher = document.getElementById("themeSwitcher");
+
+    // по умолчанию включаем тёмную тему
+    body.classList.add("dark");
+    switcher.checked = true;
+
+    // переключение темы
+    switcher.addEventListener("change", () => {
+        if (switcher.checked) {
+            body.classList.add("dark");
+        } else {
+            body.classList.remove("dark");
+        }
+    });
+    </script>
+</body>
+</html>

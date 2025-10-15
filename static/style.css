@@ -1,0 +1,34 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #fdfdfd;
+    color: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.container {
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    text-align: center;
+}
+input, button {
+    margin: 8px;
+    padding: 8px;
+    width: 200px;
+}
+.avatar {
+    border-radius: 50%;
+    margin: 10px;
+}
+.error {
+    color: red;
+}
+body.dark {
+    background: #222;
+    color: #fdfdfd;
+}
+body.dark .container {
+    border-color: #555;
+}

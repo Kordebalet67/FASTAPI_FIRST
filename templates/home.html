@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Добро пожаловать, {{ user.username }}!</h2>
+    <img src="/{{ user.avatar }}" alt="avatar" class="avatar">
+    <p><b>Хэшированный пароль:</b> {{ user.password_hash }}</p>
+    <button onclick="toggleTheme()">Сменить тему</button>
+</div>
+<script>
+function toggleTheme() {
+    document.body.classList.toggle("dark");
+}
+</script>
+</body>
+</html>
