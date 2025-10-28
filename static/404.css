@@ -1,0 +1,58 @@
+body 
+{
+    margin: 0;
+    padding: 0;
+    background-color: #0d0d0d;
+    color: #f5f5f5;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+.cat 
+{
+    width: 250px;
+    height: 250px;
+    background: url("/sources/cat-okak.jpeg") no-repeat center/cover;
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+    margin-bottom: 20px;
+}
+h1 
+{
+    font-size: 6rem;
+    margin: 0;
+    color: #ffffff;
+    text-shadow: 0 0 15px #666;
+}
+.okak 
+{
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 10px 0 30px;
+    color: #1E90FF;
+    text-shadow: 0 0 10px #1E90FF;
+}
+p 
+{
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #ccc;
+}
+a 
+{
+    display: inline-block;
+    padding: 12px 24px;
+    background: #1E90FF;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s;
+}
+a:hover
+{
+    background: #7b1fa2;
+}
