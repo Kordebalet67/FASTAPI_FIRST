@@ -16,3 +16,19 @@ white_urls = ["/", "/login", "/logout", "/register"]
 @app.get("/", response_class=HTMLResponse) # перехват адреса http://localhost:8000/
 def main_page(request: Request):
     return templates.TemplateResponse(request=request, name ="main.html")
+
+@app.get("/home", response_class=HTMLResponse)
+def home_page(request: Request):
+    return templates.TemplateResponse(request=request, name="home.html")
+
+@app.get("/login", response_class=HTMLResponse)
+def login_page(request: Request):
+    return templates.TemplateResponse(request=request, name="login.html")
+
+@app.get("/register", response_class=HTMLResponse)
+def login_page(request: Request):
+    return templates.TemplateResponse(request=request, name="register.html")
+
+@app.get("/404", response_class=HTMLResponse)
+def login_page(request: Request):
+    return templates.TemplateResponse(request=request, name="404.html")
