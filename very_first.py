@@ -1,4 +1,4 @@
-# python -m uvicorn main:app --reload
+# python -m uvicorn very_first:app --reload
 
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
