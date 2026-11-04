@@ -7,9 +7,9 @@
 </head>
 <body>
 <div class="container">
-    <h2>Добро пожаловать, {{ user.username }}!</h2>
-    <img src="/{{ user.avatar }}" alt="avatar" class="avatar">
-    <p><b>Хэшированный пароль:</b> {{ user.password_hash }}</p>
+    <h2>Добро пожаловать, {{ username }}!</h2>
+    
+    <p><b>Хэшированный пароль:</b> {{ password_hash }}</p>
     <button onclick="toggleTheme()">Сменить тему</button>
 </div> 
 <script>
