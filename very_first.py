@@ -5,6 +5,10 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 import pandas as pd
+import hashlib
+
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
 app = FastAPI()
 
@@ -26,7 +30,7 @@ def home_page(request: Request):
                                                'password_hash': 'passwpor'})
 
 
-users = [{'username' : 'admin', 'password' : '1111'}]
+users = [{'username' : 'admin', 'password' : hash_password('1111')}]
 df = pd.DataFrame(users)
 df.to_csv("krivousers.csv", index=False, encoding="utf-8")
 
@@ -51,7 +55,7 @@ def register(request: Request,
                                         {"request": request, 
                                         "error": res})
     else:
-        new_user = pd.DataFrame([{'username' : username, 'password' : password}])
+        new_user = pd.DataFrame([{'username' : username, 'password' : hash_password(password)}])
         new_user.to_csv('krivousers.csv', mode="a", index=False, header=False, encoding="utf-8")
         response = RedirectResponse(url=f"/home", status_code=302)
         return response
@@ -70,7 +74,7 @@ def login(request: Request,
     print(users_new)
     res = 'neverno'
     for i in users_new:
-        if username == str(i['username']) and password == str(i['password']) :
+        if username == i['username'] and hash_password(password) == i['password'] :
             res = 'успешно'
             break
 
