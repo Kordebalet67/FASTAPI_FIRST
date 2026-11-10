@@ -4,6 +4,7 @@ from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
+from starlette.middleware.sessions import SessionMiddleware
 import pandas as pd
 import hashlib
 
@@ -14,6 +15,7 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+app.add_middleware(SessionMiddleware, secret_key="krivobotkrivobotkrivobot")
 
 white_urls = ["/", "/login", "/logout", "/register"]
 
@@ -24,13 +26,17 @@ def main_page(request: Request):
 
 @app.get("/home", response_class=HTMLResponse)
 def home_page(request: Request):
+    username = request.session.get('username')
+    password_hash = request.session.get('password_hash')
+    if not username:
+        return RedirectResponse(url="/login", status_code=302)
     return templates.TemplateResponse(request=request, 
                                       name="home.html", 
-                                      context={'username': 'username', 
-                                               'password_hash': 'passwpor'})
+                                      context={'username': username, 
+                                               'password_hash': password_hash})
 
 
-users = [{'username' : 'admin', 'password' : hash_password('1111')}]
+users = [{'username' : 'admin', 'password' : hash_password('1111' + 'admin')}]
 df = pd.DataFrame(users)
 df.to_csv("krivousers.csv", index=False, encoding="utf-8")
 
@@ -44,6 +50,7 @@ def register(request: Request,
             password: str = Form(...), 
             username: str = Form(...)):
     res = ''
+    df = pd.read_csv('krivousers.csv')
     users_new = df.to_dict(orient="records")
     print(users_new)
     for i in users_new:
@@ -51,12 +58,14 @@ def register(request: Request,
             res = 'ужес exist'
             break
     if res == 'ужес exist':
-        return templates.TemplateResponse("register.html",
-                                        {"request": request, 
-                                        "error": res})
+        return templates.TemplateResponse(name="register.html",
+                                        request=request, 
+                                        context={"error": res})
     else:
-        new_user = pd.DataFrame([{'username' : username, 'password' : hash_password(password)}])
+        new_user = pd.DataFrame([{'username' : username, 'password' : hash_password(password + username)}])
         new_user.to_csv('krivousers.csv', mode="a", index=False, header=False, encoding="utf-8")
+        request.session['username'] = username
+        request.session['password_hash'] = hash_password(password + username)
         response = RedirectResponse(url=f"/home", status_code=302)
         return response
     
@@ -74,11 +83,13 @@ def login(request: Request,
     print(users_new)
     res = 'neverno'
     for i in users_new:
-        if username == i['username'] and hash_password(password) == i['password'] :
+        if username == i['username'] and hash_password(password + username) == i['password'] :
             res = 'успешно'
             break
 
     if res == 'успешно':
+        request.session["username"] = username
+        request.session['password_hash'] = hash_password(password + username)
         response = RedirectResponse(url=f"/home", status_code=302)
         return response
     else:

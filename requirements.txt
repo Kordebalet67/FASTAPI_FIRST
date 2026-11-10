@@ -3,3 +3,4 @@ fastapi
 pillow
 uvicorn
 jinja2
+itsdangerous
