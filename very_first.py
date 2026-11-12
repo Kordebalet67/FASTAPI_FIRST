@@ -1,5 +1,7 @@
 # python -m uvicorn very_first:app --reload
 
+from datetime import datetime, timedelta
+
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
@@ -8,6 +10,7 @@ from starlette.middleware.sessions import SessionMiddleware
 import pandas as pd
 import hashlib
 
+SESSION_LIFETIME = timedelta(minutes=3)
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
@@ -26,6 +29,13 @@ def main_page(request: Request):
 
 @app.get("/home", response_class=HTMLResponse)
 def home_page(request: Request):
+    print(datetime.now(), request.session.get('session_starttime'))
+    if datetime.now() - datetime.fromisoformat(request.session.get('session_starttime')) >= SESSION_LIFETIME:
+        # грохнуть сессию
+        request.session.clear()
+        return RedirectResponse(url="/login", status_code=302)        
+    else:
+        request.session['session_starttime'] = str(datetime.now())
     username = request.session.get('username')
     password_hash = request.session.get('password_hash')
     if not username:
@@ -66,6 +76,7 @@ def register(request: Request,
         new_user.to_csv('krivousers.csv', mode="a", index=False, header=False, encoding="utf-8")
         request.session['username'] = username
         request.session['password_hash'] = hash_password(password + username)
+        request.session['session_starttime'] = str(datetime.now())
         response = RedirectResponse(url=f"/home", status_code=302)
         return response
     
@@ -90,6 +101,7 @@ def login(request: Request,
     if res == 'успешно':
         request.session["username"] = username
         request.session['password_hash'] = hash_password(password + username)
+        request.session['session_starttime'] = str(datetime.now())
         response = RedirectResponse(url=f"/home", status_code=302)
         return response
     else:
