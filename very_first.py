@@ -1,16 +1,23 @@
-# python -m uvicorn very_first:app --reload
-
-from datetime import datetime, timedelta
+# python -m uvicorn very_first:app --reload ПОКА НЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕЕ
+# & "C:\Program Files\Git\usr\bin\openssl.exe" req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
+# ВЕРХНЮЮ СТРОЧКУ В БАШ
+# uvicorn main:app --reload --ssl-keyfile=key.pem --ssl-certfile=cert.pem
+# python -m uvicorn very_first:app --reload --ssl-keyfile=key.pem --ssl-certfile=cert.pem
+from datetime import datetime
 
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.routing import Match
 import pandas as pd
 import hashlib
 
-SESSION_LIFETIME = timedelta(minutes=3)
+SESSION_LIFETIME = 60
+white_urls = ["/", "/login", "/logout", "/register"]
+
 def hash_password(password: str) -> str:
     return hashlib.sha256(password.encode("utf-8")).hexdigest()
 
@@ -18,9 +25,43 @@ app = FastAPI()
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
-app.add_middleware(SessionMiddleware, secret_key="krivobotkrivobotkrivobot")
 
-white_urls = ["/", "/login", "/logout", "/register"]
+@app.middleware("http")
+async def session_activity_middleware(request: Request, call_next):
+    path = request.url.path
+
+    if path.startswith("/static") or path in white_urls or request.url.path.startswith("/sources"):
+        return await call_next(request)
+
+    route_exists = False
+    for route in app.routes:
+        match, _ = route.matches(request.scope)
+        if match == Match.FULL:
+            route_exists = True
+            break
+    if not route_exists:
+        return await call_next(request)
+
+    if not request.session.get("username"):
+        return templates.TemplateResponse(
+            request=request,
+            name="403.html",
+            context={"detail": "Доступ запрещен или время сессии истекло."},
+            status_code=403,
+        )
+
+
+    
+    request.session["last_activity"] = str(datetime.now())
+    print(datetime.now())
+
+    return await call_next(request)
+
+app.add_middleware(SessionMiddleware,
+                    secret_key="krivobotkrivobotkrivobot",
+                    max_age=SESSION_LIFETIME, 
+                    https_only=True)
+
 
 # Маршрутизация приложения
 @app.get("/", response_class=HTMLResponse) # перехват адреса http://localhost:8000/
@@ -29,17 +70,12 @@ def main_page(request: Request):
 
 @app.get("/home", response_class=HTMLResponse)
 def home_page(request: Request):
-    print(datetime.now(), request.session.get('session_starttime'))
-    if datetime.now() - datetime.fromisoformat(request.session.get('session_starttime')) >= SESSION_LIFETIME:
-        # грохнуть сессию
-        request.session.clear()
-        return RedirectResponse(url="/login", status_code=302)        
-    else:
-        request.session['session_starttime'] = str(datetime.now())
+    # print(datetime.now(), request.session.get('session_starttime'))
     username = request.session.get('username')
     password_hash = request.session.get('password_hash')
     if not username:
-        return RedirectResponse(url="/login", status_code=302)
+        return RedirectResponse(url="/403", status_code=302)
+
     return templates.TemplateResponse(request=request, 
                                       name="home.html", 
                                       context={'username': username, 
@@ -105,12 +141,25 @@ def login(request: Request,
         response = RedirectResponse(url=f"/home", status_code=302)
         return response
     else:
-        return templates.TemplateResponse({"request": request, 
-                                        "error": "Неверный пароль или логин"},
-                                        name="login.html")
+        return templates.TemplateResponse(request=request,
+                                          name="login.html",
+                                        context={"error": "Неверный пароль или логин"},
+                                        )
 
 
 
-@app.get("/404", response_class=HTMLResponse)
-def _404_page(request: Request):
-    return templates.TemplateResponse(request=request, name="404.html")
+@app.exception_handler(404)
+def not_found_exception_handler(request: Request, exc: StarletteHTTPException):
+    return templates.TemplateResponse(
+        request=request,
+        name="404.html",
+        status_code=404,
+    )
+
+@app.get("/403", response_class=HTMLResponse)
+def forbidden_page(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="403.html",
+        status_code=403,
+    )

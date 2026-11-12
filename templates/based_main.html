@@ -2,4 +2,10 @@
 {% block title %}Main page{% endblock title %}
 {% block content %}
     <h2>Добро пожаловать, юзверь!</h2>
+    <form action="{{ url_for('login_page') }}" method="get">
+        <button type="submit" class="btn">Перейти на страницу входа</button>
+    </form>
+    <form action="{{ url_for('register_page') }}" method="get">
+        <button type="submit" class="btn">Перейти на страницу регистрации</button>
+    </form>    
 {% endblock %}

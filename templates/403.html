@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>403 — Доступ запрещен</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        body {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .card {
+            background: #ffffff;
+            max-width: 440px;
+            width: 100%;
+            padding: 40px 32px;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+        .error-code {
+            font-size: 72px;
+            font-weight: 800;
+            color: #ef4444;
+            line-height: 1;
+            margin-bottom: 12px;
+        }
+        h1 {
+            font-size: 22px;
+            margin-bottom: 12px;
+            color: #111827;
+        }
+        p {
+            font-size: 15px;
+            color: #6b7280;
+            line-height: 1.5;
+            margin-bottom: 28px;
+        }
+        .btn {
+            display: inline-block;
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn:hover {
+            background-color: #1d4ed8;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="error-code">403</div>
+        <h1>Доступ запрещен</h1>
+        <p>{{ detail or "У вас нет прав для просмотра этой страницы или ваша сессия истекла." }}</p>
+
+        <!-- Вариант 1: Через форму с method="get" -->
+        <form action="{{ url_for('login_page') }}" method="get">
+            <button type="submit" class="btn">Перейти на страницу входа</button>
+        </form>
+
+        <!-- Вариант 2 (альтернатива): Обычная ссылка, которая тоже делает GET-запрос -->
+        <!-- <a href="{{ url_for('login_page') }}" class="btn">Перейти на страницу входа</a> -->
+    </div>
+</body>
+</html>
