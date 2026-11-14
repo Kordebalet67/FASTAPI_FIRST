@@ -16,6 +16,10 @@
         <input type="password" id="password" name="password" placeholder="Пароль" required>
         <input type="checkbox" onclick="togglePassword()"> Показать пароль<br>
         <button type="submit">Зарегистрировать</button>
+
+        <label for="avatar">Выберите фото профиля:</label><br>
+        <input type="file" id="avatar" name="avatar" accept="image/png, image/jpeg, image/webp" onchange="previewImage(event)"><br>
+        <img id="avatar-preview" src="#" alt="Предпросмотр" style="display: none; width: 100px; height: 100px; object-fit: cover; border-radius: 50%; margin: 10px 0;"><br>
     </form>
     <button onclick="toggleTheme()">Сменить тему</button>
     <form action="{{ url_for('login_page') }}" method="get">
@@ -30,6 +34,18 @@ function togglePassword() {
 function toggleTheme() {
     document.body.classList.toggle("dark");
 }
+
+function previewImage(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById("avatar-preview");
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+    } else {
+        preview.style.display = "none";
+    }
+}
+
 </script>
 </body>
 </html>
