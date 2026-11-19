@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Новости — Главная</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #fafafa;
+    color: #1e1b4b;
+    line-height: 1.6;
+  }
+  .navbar {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e5e7eb;
+    z-index: 100;
+  }
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    align-items: center;
+  }
+  .nav-links a {
+    color: #4b5563;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #6366f1; }
+  .nav-btn {
+    padding: 0.5rem 1.25rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white !important;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+  }
+  .nav-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+  }
+  .hero {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  .hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+  .hero-content h1 span {
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero-content p {
+    font-size: 1.15rem;
+    color: #6b7280;
+    margin-bottom: 2rem;
+    max-width: 480px;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .btn-primary, .btn-secondary {
+    padding: 0.9rem 1.75rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  }
+  .btn-secondary {
+    background: white;
+    color: #6366f1;
+    border: 2px solid #e0e7ff;
+  }
+  .btn-secondary:hover {
+    background: #f5f3ff;
+    border-color: #c7d2fe;
+  }
+  .hero-illustration {
+    display: flex;
+    justify-content: center;
+    animation: float 5s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+  }
+  .features {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+  }
+  .features-title {
+    text-align: center;
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+  }
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  .feature-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(99, 102, 241, 0.1);
+    border-color: #c7d2fe;
+  }
+  .feature-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #ede9fe, #e0e7ff);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .feature-card h3 {
+    font-size: 1.15rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+  .feature-card p {
+    color: #6b7280;
+    font-size: 0.95rem;
+  }
+  .cta {
+    max-width: 1200px;
+    margin: 4rem auto;
+    padding: 3rem 2rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border-radius: 24px;
+    text-align: center;
+    color: white;
+  }
+  .cta h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .cta p {
+    opacity: 0.9;
+    margin-bottom: 2rem;
+  }
+  .cta .btn-white {
+    padding: 0.9rem 2rem;
+    background: white;
+    color: #6366f1;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-block;
+    transition: all 0.3s ease;
+  }
+  .cta .btn-white:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  footer {
+    background: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 2rem;
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.9rem;
+  }
+  @media (max-width: 768px) {
+    .hero { grid-template-columns: 1fr; padding: 3rem 1.5rem; }
+    .hero-content h1 { font-size: 2.5rem; }
+    .features-grid { grid-template-columns: 1fr; }
+    .nav-links { gap: 1rem; }
+    .nav-links a:not(.nav-btn) { display: none; }
+  }
+</style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="home" class="logo">● Новости</a>
+      <ul class="nav-links">
+        <li><a href="home">Главная</a></li>
+        <li><a href="main">Лента</a></li>
+        <li><a href="login" class="nav-btn">Войти</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Будь в курсе <span>важных событий</span></h1>
+      <p>Современная платформа для чтения и публикации новостей. Делись мыслями, следи за событиями и создавай своё информационное пространство.</p>
+      <div class="hero-buttons">
+        <a href="register" class="btn-primary">Начать бесплатно</a>
+        <a href="main" class="btn-secondary">Смотреть ленту</a>
+      </div>
+    </div>
+    <div class="hero-illustration">
+      <svg width="400" height="400" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="200" cy="200" r="180" fill="#ede9fe"/>
+        <circle cx="200" cy="200" r="140" fill="#e0e7ff"/>
+        <rect x="100" y="130" width="200" height="140" rx="16" fill="white" stroke="#6366f1" stroke-width="3"/>
+        <rect x="120" y="155" width="100" height="12" rx="6" fill="#6366f1"/>
+        <rect x="120" y="175" width="160" height="8" rx="4" fill="#c7d2fe"/>
+        <rect x="120" y="190" width="140" height="8" rx="4" fill="#c7d2fe"/>
+        <rect x="120" y="205" width="150" height="8" rx="4" fill="#c7d2fe"/>
+        <rect x="120" y="230" width="60" height="20" rx="10" fill="#a855f7"/>
+        <circle cx="320" cy="100" r="30" fill="#a855f7" opacity="0.2"/>
+        <circle cx="80" cy="300" r="25" fill="#6366f1" opacity="0.2"/>
+        <path d="M340 280 L360 260 L380 280" stroke="#6366f1" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <circle cx="360" cy="260" r="8" fill="#6366f1"/>
+      </svg>
+    </div>
+  </section>
+
+  <section class="features">
+    <h2 class="features-title">Почему выбирают нас</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <h3>Быстро и удобно</h3>
+        <p>Мгновенная загрузка новостей и интуитивно понятный интерфейс для комфортного чтения.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        </div>
+        <h3>Публикуй своё</h3>
+        <p>Добавляйте свои новости и делитесь важными событиями с сообществом в один клик.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        </div>
+        <h3>Сообщество</h3>
+        <p>Присоединяйтесь к тысячам пользователей, которые уже делятся своими историями.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>Готовы начать?</h2>
+    <p>Создайте аккаунт за минуту и получите доступ ко всем возможностям платформы.</p>
+    <a href="register" class="btn-white">Зарегистрироваться</a>
+  </section>
+
+  <footer>
+    © 2026 Новости. Все права защищены.
+  </footer>
+</body>
+</html>

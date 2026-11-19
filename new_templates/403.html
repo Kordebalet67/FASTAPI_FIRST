@@ -1,0 +1,96 @@
+<!-- ==================== 403.html ==================== -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>403 — Доступ запрещён</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #1e1b4b;
+  }
+  .container {
+    text-align: center;
+    max-width: 500px;
+    animation: fadeIn 0.6s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .illustration {
+    margin: 0 auto 2rem;
+    width: 220px;
+    height: 220px;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .code {
+    font-size: 5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  p {
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <svg class="illustration" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="110" cy="110" r="100" fill="#ede9fe"/>
+      <circle cx="110" cy="110" r="75" fill="#c7d2fe"/>
+      <path d="M110 60 L110 160" stroke="#6366f1" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="110" cy="110" r="45" stroke="#6366f1" stroke-width="8" fill="none"/>
+      <path d="M75 75 L145 145" stroke="#ef4444" stroke-width="8" stroke-linecap="round"/>
+    </svg>
+    <div class="code">403</div>
+    <h1>Доступ запрещён</h1>
+    <p>К сожалению, у вас нет прав для просмотра этой страницы. Возможно, вам нужно войти в систему или запросить доступ у администратора.</p>
+    <a href="home" class="btn">Вернуться на главную</a>
+  </div>
+</body>
+</html>

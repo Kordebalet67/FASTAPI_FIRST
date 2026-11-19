@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Вход — Новости</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 50%, #e0e7ff 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 960px;
+    width: 100%;
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15);
+    animation: fadeIn 0.6s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .side-panel {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    padding: 3rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .side-panel::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 50%);
+  }
+  .side-panel h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+  .side-panel p {
+    opacity: 0.9;
+    line-height: 1.6;
+    position: relative;
+    margin-bottom: 2rem;
+  }
+  .side-illustration {
+    position: relative;
+    margin: 2rem auto;
+  }
+  .form-panel {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2rem;
+    display: inline-block;
+  }
+  .form-panel h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .form-panel .subtitle {
+    color: #6b7280;
+    margin-bottom: 2rem;
+  }
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+  label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: #374151;
+  }
+  input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: all 0.2s;
+    background: #fafafa;
+  }
+  input:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  }
+  .form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 0.875rem;
+  }
+  .checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .checkbox-wrapper input {
+    width: auto;
+  }
+  .forgot {
+    color: #6366f1;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .forgot:hover { text-decoration: underline; }
+  .btn-submit {
+    width: 100%;
+    padding: 0.95rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+  }
+  .btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  }
+  .divider {
+    text-align: center;
+    margin: 1.5rem 0;
+    position: relative;
+    color: #9ca3af;
+    font-size: 0.875rem;
+  }
+  .divider::before, .divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: #e5e7eb;
+  }
+  .divider::before { left: 0; }
+  .divider::after { right: 0; }
+  .signup-link {
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.9rem;
+  }
+  .signup-link a {
+    color: #6366f1;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .signup-link a:hover { text-decoration: underline; }
+  .alert {
+    padding: 0.75rem 1rem;
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    color: #065f46;
+    border-radius: 10px;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+    display: none;
+  }
+  @media (max-width: 768px) {
+    .wrapper { grid-template-columns: 1fr; }
+    .side-panel { display: none; }
+  }
+</style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="side-panel">
+      <h2>С возвращением!</h2>
+      <p>Рады снова видеть вас. Войдите в аккаунт, чтобы продолжить читать и публиковать новости.</p>
+      <svg class="side-illustration" width="200" height="200" viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="80" fill="rgba(255,255,255,0.15)"/>
+        <circle cx="100" cy="80" r="30" fill="white" opacity="0.9"/>
+        <path d="M50 150 Q100 110 150 150 L150 180 L50 180 Z" fill="white" opacity="0.9"/>
+        <circle cx="150" cy="50" r="10" fill="white" opacity="0.4"/>
+        <circle cx="40" cy="140" r="8" fill="white" opacity="0.4"/>
+      </svg>
+    </div>
+    <div class="form-panel">
+      <span class="logo">● Новости</span>
+      <h1>Вход в аккаунт</h1>
+      <p class="subtitle">Введите свои данные для входа</p>
+      <div class="alert" id="alert">✓ Вход выполнен успешно!</div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Пароль</label>
+          <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <div class="form-options">
+          <label class="checkbox-wrapper">
+            <input type="checkbox">
+            <span>Запомнить меня</span>
+          </label>
+          <a href="#" class="forgot">Забыли пароль?</a>
+        </div>
+        <button type="submit" class="btn-submit">Войти</button>
+      </form>
+      <div class="divider">или</div>
+      <p class="signup-link">Нет аккаунта? <a href="register">Зарегистрироваться</a></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const alert = document.getElementById('alert');
+      alert.style.display = 'block';
+      setTimeout(() => {
+        window.location.href = 'main';
+      }, 800);
+    });
+  </script>
+</body>
+</html>

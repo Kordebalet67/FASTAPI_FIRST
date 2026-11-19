@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Страница не найдена</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    color: #1e1b4b;
+  }
+  .container {
+    text-align: center;
+    max-width: 500px;
+    animation: fadeIn 0.6s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .illustration {
+    margin: 0 auto 2rem;
+    width: 240px;
+    height: 240px;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(-2deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+  }
+  .code {
+    font-size: 5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+  }
+  p {
+    color: #6b7280;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  .btn {
+    display: inline-block;
+    padding: 0.85rem 2rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+    margin-right: 0.5rem;
+  }
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+  }
+  .btn.secondary {
+    background: white;
+    color: #6366f1;
+    border: 2px solid #e0e7ff;
+    box-shadow: none;
+  }
+  .btn.secondary:hover {
+    background: #f5f3ff;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.15);
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <svg class="illustration" viewBox="0 0 240 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="120" cy="120" r="110" fill="#ede9fe"/>
+      <circle cx="60" cy="60" r="3" fill="#a855f7"/>
+      <circle cx="180" cy="50" r="2" fill="#6366f1"/>
+      <circle cx="200" cy="170" r="3" fill="#a855f7"/>
+      <circle cx="40" cy="180" r="2" fill="#6366f1"/>
+      <g transform="translate(80, 60)">
+        <ellipse cx="40" cy="70" rx="35" ry="40" fill="#c7d2fe"/>
+        <circle cx="40" cy="45" r="25" fill="#e0e7ff" stroke="#6366f1" stroke-width="3"/>
+        <circle cx="40" cy="45" r="18" fill="#6366f1"/>
+        <circle cx="40" cy="45" r="10" fill="#1e1b4b"/>
+        <circle cx="45" cy="40" r="3" fill="white"/>
+        <rect x="15" y="75" width="50" height="35" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="3"/>
+        <circle cx="25" cy="92" r="4" fill="#6366f1"/>
+        <circle cx="55" cy="92" r="4" fill="#6366f1"/>
+        <path d="M20 110 L15 125 M60 110 L65 125" stroke="#6366f1" stroke-width="4" stroke-linecap="round"/>
+      </g>
+      <text x="120" y="210" text-anchor="middle" font-family="Inter" font-size="14" fill="#6366f1" font-weight="600">?</text>
+    </svg>
+    <div class="code">404</div>
+    <h1>Страница потерялась в космосе</h1>
+    <p>Мы искали эту страницу повсюду, но не нашли. Возможно, она была перемещена или удалена. Давайте вернёмся на знакомую территорию.</p>
+    <a href="home" class="btn">На главную</a>
+    <a href="main" class="btn secondary">К новостям</a>
+  </div>
+</body>
+</html>

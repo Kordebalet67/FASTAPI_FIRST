@@ -38,7 +38,7 @@ app.mount("/images", StaticFiles(directory="images"), name="images")
 async def session_activity_middleware(request: Request, call_next):
     path = request.url.path
 
-    if path.startswith("/static") or path in white_urls or request.url.path.startswith("/sources"):
+    if path.startswith("/static") or path in white_urls or path.startswith("/sources"):
         return await call_next(request)
 
     route_exists = False

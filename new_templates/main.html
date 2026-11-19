@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лента новостей</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-400-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-600-normal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/fontsource/fonts/inter@latest/latin-700-normal.css">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #fafafa;
+    color: #1e1b4b;
+    line-height: 1.6;
+  }
+  .navbar {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #e5e7eb;
+    z-index: 100;
+  }
+  .nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    align-items: center;
+  }
+  .nav-links a {
+    color: #4b5563;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: #6366f1; }
+  .nav-links a.active { color: #6366f1; }
+  .user-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.9rem;
+    background: #f5f3ff;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #6366f1;
+  }
+  .user-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+  }
+  .layout {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2rem;
+  }
+  .main-content {
+    min-width: 0;
+  }
+  .page-header {
+    margin-bottom: 2rem;
+  }
+  .page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .page-header p {
+    color: #6b7280;
+  }
+  .compose-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  }
+  .compose-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .compose-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+  }
+  .compose-title {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    transition: all 0.2s;
+    background: #fafafa;
+  }
+  .compose-title:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  }
+  .compose-text {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+    transition: all 0.2s;
+    background: #fafafa;
+  }
+  .compose-text:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+  }
+  .compose-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+  }
+  .compose-actions {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    border: none;
+    background: #f5f3ff;
+    color: #6366f1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .icon-btn:hover {
+    background: #ede9fe;
+    transform: translateY(-1px);
+  }
+  .btn-publish {
+    padding: 0.65rem 1.5rem;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.25);
+  }
+  .btn-publish:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.4);
+  }
+  .btn-publish:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .feed {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .news-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    transition: all 0.3s ease;
+    animation: slideIn 0.4s ease-out;
+  }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .news-card:hover {
+    box-shadow: 0 8px 24px rgba(99, 102, 241, 0.08);
+    border-color: #c7d2fe;
+  }
+  .news-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .news-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .news-meta {
+    flex: 1;
+  }
+  .news-author {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .news-time {
+    color: #9ca3af;
+    font-size: 0.8rem;
+  }
+  .news-menu {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    color: #9ca3af;
+    transition: all 0.2s;
+  }
+  .news-menu:hover {
+    background: #f3f4f6;
+    color: #6366f1;
+  }
+  .news-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: #1e1b4b;
+  }
+  .news-content {
+    color: #4b5563;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 1rem;
+  }
+  .news-image {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+    max-height: 300px;
+    object-fit: cover;
+  }
+  .news-tag {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background: #f5f3ff;
+    color: #6366f1;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .news-footer {
+    display: flex;
+    gap: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+  }
+  .news-action {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 0.875rem;
+    font-family: inherit;
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+  .news-action:hover {
+    background: #f5f3ff;
+    color: #6366f1;
+  }
+  .news-action.liked {
+    color: #ef4444;
+  }
+  .sidebar {
+    position: sticky;
+    top: 90px;
+    height: fit-content;
+  }
+  .sidebar-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid #e5e7eb;
+    margin-bottom: 1rem;
+  }
+  .sidebar-card h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .stat-item {
+    padding: 1rem;
+    background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+    border-radius: 12px;
+    text-align: center;
+  }
+  .stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #6366f1;
+  }
+  .stat-label {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-top: 0.25rem;
+  }
+  .trending-item {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .trending-item:last-child { border-bottom: none; }
+  .trending-num {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #c7d2fe;
+    width: 24px;
+  }
+  .trending-title {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    line-height: 1.4;
+  }
+  .trending-meta {
+    font-size: 0.75rem;
+    color: #9ca3af;
+    margin-top: 0.25rem;
+  }
+  .empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #9ca3af;
+  }
+  .empty-state svg {
+    margin: 0 auto 1rem;
+  }
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: #1e1b4b;
+    color: white;
+    padding: 0.9rem 1.5rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+  }
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  @media (max-width: 968px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { position: static; }
+  }
+  @media (max-width: 640px) {
+    .layout { padding: 1rem; }
+    .nav-links a:not(.user-badge) { display: none; }
+  }
+</style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="home.html" class="logo">● Новости</a>
+      <ul class="nav-links">
+        <li><a href="home.html">Главная</a></li>
+        <li><a href="main.html" class="active">Лента</a></li>
+        <li>
+          <div class="user-badge">
+            <div class="user-avatar">
+              <img src="images/{{ avatar }}" alt="">
+            </div>
+            <span>{{ name }}</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="layout">
+    <div class="main-content">
+      <div class="page-header">
+        <h1>Лента новостей</h1>
+        <p>Читайте актуальные события и делитесь своими мыслями</p>
+      </div>
+
+      <div class="compose-card">
+        <div class="compose-header">
+          <div class="compose-avatar">И</div>
+          <div style="flex:1; color:#9ca3af; font-size:0.9rem;">Поделитесь новостью с сообществом...</div>
+        </div>
+        <input type="text" class="compose-title" id="newsTitle" placeholder="Заголовок новости">
+        <textarea class="compose-text" id="newsContent" placeholder="Расскажите подробнее..."></textarea>
+        <div class="compose-footer">
+          <div class="compose-actions">
+            <button class="icon-btn" title="Эмодзи" onclick="addEmoji()">😊</button>
+            <button class="icon-btn" title="Тег" onclick="addTag()">#</button>
+            <button class="icon-btn" title="Очистить" onclick="clearForm()">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg>
+            </button>
+          </div>
+          <button class="btn-publish" id="publishBtn" onclick="publishNews()">Опубликовать</button>
+        </div>
+      </div>
+
+      <div class="feed" id="feed"></div>
+    </div>
+
+    <aside class="sidebar">
+      <div class="sidebar-card">
+        <h3>Статистика</h3>
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="statPosts">0</div>
+            <div class="stat-label">Новостей</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="statLikes">0</div>
+            <div class="stat-label">Лайков</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>🔥 В тренде</h3>
+        <div class="trending-item">
+          <div class="trending-num">1</div>
+          <div>
+            <div class="trending-title">Искусственный интеллект в 2026 году</div>
+            <div class="trending-meta">12.4K обсуждений</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-num">2</div>
+          <div>
+            <div class="trending-title">Новые технологии в космосе</div>
+            <div class="trending-meta">8.7K обсуждений</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-num">3</div>
+          <div>
+            <div class="trending-title">Устойчивое развитие городов</div>
+            <div class="trending-meta">6.2K обсуждений</div>
+          </div>
+        </div>
+        <div class="trending-item">
+          <div class="trending-num">4</div>
+          <div>
+            <div class="trending-title">Будущее образования</div>
+            <div class="trending-meta">4.8K обсуждений</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-card">
+        <h3>💡 Совет дня</h3>
+        <p style="font-size:0.9rem; color:#6b7280; line-height:1.6;">Пишите короткие и ёмкие заголовки — они привлекают больше внимания читателей.</p>
+      </div>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const defaultNews = [
+      {
+        id: 1,
+        author: 'Анна Петрова',
+        initials: 'АП',
+        title: 'Запущен новый проект по развитию открытых данных',
+        content: 'Сегодня стартовала масштабная инициатива по открытому доступу к государственным данным. Проект позволит разработчикам и исследователям создавать новые сервисы на основе актуальной информации.',
+        tags: ['Технологии', 'Государство'],
+        time: '2 часа назад',
+        likes: 42,
+        comments: 12,
+        liked: false
+      },
+      {
+        id: 2,
+        author: 'Дмитрий Соколов',
+        initials: 'ДС',
+        title: 'Как изменится рынок труда в ближайшие 5 лет',
+        content: 'Эксперты прогнозируют значительные изменения на рынке труда. Автоматизация и ИИ создадут новые профессии, но потребуют переобучения миллионов работников. Главное — гибкость и готовность учиться.',
+        tags: ['Карьера', 'Аналитика'],
+        time: '5 часов назад',
+        likes: 87,
+        comments: 34,
+        liked: false
+      },
+      {
+        id: 3,
+        author: 'Мария Иванова',
+        initials: 'МИ',
+        title: 'Открыт новый парк в центре города',
+        content: 'После двух лет реконструкции открылся современный парк с зонами для спорта, детскими площадками и кафе. Уже в первый день его посетили более 5000 человек.',
+        tags: ['Город', 'События'],
+        time: 'вчера',
+        likes: 156,
+        comments: 28,
+        liked: false
+      }
+    ];
+
+    let news = JSON.parse(localStorage.getItem('news')) || defaultNews;
+    let newsIdCounter = news.length ? Math.max(...news.map(n => n.id)) + 1 : 1;
+
+    function saveNews() {
+      localStorage.setItem('news', JSON.stringify(news));
+    }
+
+    function renderFeed() {
+      const feed = document.getElementById('feed');
+      if (news.length === 0) {
+        feed.innerHTML = `
+          <div class="empty-state">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+              <circle cx="40" cy="40" r="35" fill="#ede9fe"/>
+              <path d="M25 35 L55 35 M25 45 L45 45" stroke="#a855f7" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <p>Пока нет новостей. Будьте первым, кто опубликует!</p>
+          </div>
+        `;
+      } else {
+        feed.innerHTML = news.map(n => `
+          <article class="news-card" data-id="${n.id}">
+            <div class="news-header">
+              <div class="news-avatar">${n.initials}</div>
+              <div class="news-meta">
+                <div class="news-author">${escapeHtml(n.author)}</div>
+                <div class="news-time">${n.time}</div>
+              </div>
+              <button class="news-menu" onclick="deleteNews(${n.id})" title="Удалить">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6"/></svg>
+              </button>
+            </div>
+            <h2 class="news-title">${escapeHtml(n.title)}</h2>
+            <p class="news-content">${escapeHtml(n.content)}</p>
+            <div>
+              ${n.tags.map(t => `<span class="news-tag">#${escapeHtml(t)}</span>`).join('')}
+            </div>
+            <div class="news-footer">
+              <button class="news-action ${n.liked ? 'liked' : ''}" onclick="toggleLike(${n.id})">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="${n.liked ? 'currentColor' : 'none'}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+                <span>${n.likes}</span>
+              </button>
+              <button class="news-action">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                <span>${n.comments}</span>
+              </button>
+              <button class="news-action" onclick="shareNews(${n.id})">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                <span>Поделиться</span>
+              </button>
+            </div>
+          </article>
+        `).join('');
+      }
+      updateStats();
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function publishNews() {
+      const title = document.getElementById('newsTitle').value.trim();
+      const content = document.getElementById('newsContent').value.trim();
+      
+      if (!title || !content) {
+        showToast('Заполните заголовок и текст новости');
+        return;
+      }
+
+      const tags = [];
+      const tagMatches = content.match(/#\w+/g);
+      if (tagMatches) {
+        tagMatches.forEach(t => tags.push(t.substring(1)));
+      }
+      if (tags.length === 0) tags.push('Новости');
+
+      const newPost = {
+        id: newsIdCounter++,
+        author: 'Иван Иванов',
+        initials: 'ИИ',
+        title: title,
+        content: content,
+        tags: tags,
+        time: 'только что',
+        likes: 0,
+        comments: 0,
+        liked: false
+      };
+
+      news.unshift(newPost);
+      saveNews();
+      renderFeed();
+      clearForm();
+      showToast('✓ Новость опубликована!');
+    }
+
+    function toggleLike(id) {
+      const item = news.find(n => n.id === id);
+      if (item) {
+        item.liked = !item.liked;
+        item.likes += item.liked ? 1 : -1;
+        saveNews();
+        renderFeed();
+      }
+    }
+
+    function deleteNews(id) {
+      if (confirm('Удалить эту новость?')) {
+        news = news.filter(n => n.id !== id);
+        saveNews();
+        renderFeed();
+        showToast('Новость удалена');
+      }
+    }
+
+    function shareNews(id) {
+      const item = news.find(n => n.id === id);
+      if (item && navigator.clipboard) {
+        navigator.clipboard.writeText(`${item.title}\n\n${item.content}`);
+        showToast('✓ Скопировано в буфер обмена');
+      }
+    }
+
+    function clearForm() {
+      document.getElementById('newsTitle').value = '';
+      document.getElementById('newsContent').value = '';
+    }
+
+    function addEmoji() {
+      const emojis = ['🔥', '✨', '💡', '🎉', '🚀', '⭐', '💪', '🌟'];
+      const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+      const textarea = document.getElementById('newsContent');
+      textarea.value += ' ' + emoji;
+      textarea.focus();
+    }
+
+    function addTag() {
+      const textarea = document.getElementById('newsContent');
+      textarea.value += ' #';
+      textarea.focus();
+    }
+
+    function updateStats() {
+      document.getElementById('statPosts').textContent = news.length;
+      document.getElementById('statLikes').textContent = news.reduce((s, n) => s + n.likes, 0);
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    renderFeed();
+  </script>
+</body>
+</html>
